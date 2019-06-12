@@ -34,3 +34,24 @@ WHERE id=2;
 SELECT first_name, last_name FROM workers_info WHERE workers_salary < 30000;
 SELECT first_name, last_name FROM workers_info WHERE workers_position = 'Primarch' and workers_salary < 30000;
 
+CREATE TABLE IF NOT EXISTS workers_links (
+id INT UNSIGNED AUTO_INCREMENT primary key,
+master_id INT UNSIGNED,
+slave_id INT UNSIGNED
+);
+
+insert into workers_links (master_id, slave_id) values (3,4);
+insert into workers_links (master_id, slave_id) values (3,1);
+insert into workers_links (master_id, slave_id) values (2,3);
+insert into workers_links (master_id, slave_id) values (2,1);
+
+
+select worker.*
+from workers_info as worker
+	left join workers_links as links on worker.id=links.slave_id
+where links.master_id=(
+	select id 
+    from workers_info 
+    where first_name='Mark'
+)    
+;
